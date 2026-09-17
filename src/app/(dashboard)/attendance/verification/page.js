@@ -6,7 +6,7 @@ import {
   Table, Select, LoadingSpinner, EmptyState, ConnectionIndicator
 } from '@/components/ui'
 import { useToast } from '@/components/ui/Toast'
-import { ClipboardCheck, CheckCircle, Check, X } from 'lucide-react'
+import { ClipboardCheck, CheckCircle, Check, X, Download } from 'lucide-react'
 import { KELAS_OPTIONS } from '@/lib/constants'
 import { createClient } from '@/lib/supabase/client'
 import styles from './verification.module.css'
@@ -35,6 +35,7 @@ export default function VerificationPage() {
   const [loading, setLoading] = useState(true)
   const [dataLoading, setDataLoading] = useState(false)
   const [isConnected, setIsConnected] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
 
   const [activeTab, setActiveTab] = useState('semua')
   const [kelasFilter, setKelasFilter] = useState('')
@@ -211,9 +212,59 @@ export default function VerificationPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
         <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 900 }}>VERIFIKASI KEHADIRAN</h1>
-        <ConnectionIndicator isConnected={isConnected} />
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <Button 
+            variant="outline" 
+            size="sm"
+            disabled={isExporting}
+            onClick={async () => {
+              setIsExporting(true)
+              try {
+                const res = await fetch('/api/reports/attendance/excel-global')
+                if (!res.ok) throw new Error('Gagal unduh')
+                const blob = await res.blob()
+                const a = document.createElement('a')
+                a.href = URL.createObjectURL(blob)
+                a.download = `Rekap_Global.xlsx`
+                a.click()
+              } catch (e) {
+                addToast(e.message, 'error')
+              } finally {
+                setIsExporting(false)
+              }
+            }}
+          >
+            <Download size={16} style={{marginRight: '8px'}} /> Global
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            disabled={isExporting}
+            onClick={async () => {
+              setIsExporting(true)
+              try {
+                const m = new Date().getMonth() + 1
+                const y = new Date().getFullYear()
+                const res = await fetch(`/api/reports/attendance/excel-monthly?month=${m}&year=${y}`)
+                if (!res.ok) throw new Error('Gagal unduh')
+                const blob = await res.blob()
+                const a = document.createElement('a')
+                a.href = URL.createObjectURL(blob)
+                a.download = `Rekap_Bulan_Ini.xlsx`
+                a.click()
+              } catch (e) {
+                addToast(e.message, 'error')
+              } finally {
+                setIsExporting(false)
+              }
+            }}
+          >
+            <Download size={16} style={{marginRight: '8px'}} /> Bulan Ini
+          </Button>
+          <ConnectionIndicator isConnected={isConnected} />
+        </div>
       </div>
 
       <Card style={{ padding: '1.5rem' }}>
