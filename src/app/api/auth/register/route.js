@@ -21,7 +21,7 @@ export async function POST(request) {
       );
     }
 
-    const supabase = createServiceClient();
+    const supabase = await createServiceClient();
 
     // Check if username exists in members table
     const { data: existingMember, error: checkError } = await supabase
@@ -85,8 +85,9 @@ export async function POST(request) {
       .insert([
         {
           user_id: authUser.id,
+          member_name: full_name,
           action: 'MEMBER_REGISTER',
-          description: `Pendaftaran anggota baru: ${username}`,
+          details: `Pendaftaran anggota baru: ${username}`,
           created_at: new Date().toISOString()
         }
       ]);
