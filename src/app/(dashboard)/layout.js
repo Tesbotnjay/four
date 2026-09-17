@@ -11,7 +11,7 @@ import styles from './layout.module.css';
 import { 
   LayoutDashboard, Users, Calendar, Radio, ClipboardCheck, 
   FileText, Megaphone, Bell, ScrollText, Settings, LogOut, Menu, X,
-  User, ChevronDown, Home, Image as ImageIcon
+  User, ChevronDown, Home, Image as ImageIcon, UserCheck
 } from 'lucide-react';
 
 const MENU_ITEMS = [
@@ -20,7 +20,8 @@ const MENU_ITEMS = [
   { path: '/activities', label: 'Kegiatan', icon: Calendar, roles: ['super_admin', 'admin', 'sekretaris', 'anggota'] },
   { path: '/broadcasts', label: 'Broadcast', icon: Radio, roles: ['super_admin', 'admin', 'sekretaris', 'anggota'] },
   { path: '/gallery', label: 'Galeri', icon: ImageIcon, roles: ['super_admin', 'admin', 'pembina', 'sekretaris', 'anggota'] },
-  { path: '/attendance/verification', label: 'Verifikasi', icon: ClipboardCheck, roles: ['super_admin', 'admin', 'sekretaris'] },
+  { path: '/attendance/verification', label: 'Verifikasi Absen', icon: ClipboardCheck, roles: ['super_admin', 'admin', 'sekretaris'] },
+  { path: '/members/verification', label: 'Verifikasi Anggota', icon: UserCheck, roles: ['super_admin'] },
   { path: '/reports', label: 'Rekap', icon: FileText, roles: ['super_admin', 'admin', 'pembina', 'sekretaris'] },
   { path: '/announcements', label: 'Pengumuman', icon: Megaphone, roles: ['super_admin', 'admin', 'pembina', 'sekretaris', 'anggota'] },
   { path: '/notifications', label: 'Notifikasi', icon: Bell, roles: ['super_admin', 'admin', 'pembina', 'sekretaris', 'anggota'] },

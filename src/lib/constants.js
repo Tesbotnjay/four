@@ -125,9 +125,11 @@ export const BROADCAST_TARGET = {
 }
 
 export const KELAS_OPTIONS = [
-  '10-1', '10-2', '10-3', '10-4', '10-5',
-  '11-1', '11-2', '11-3', '11-4', '11-5',
-  '12-1', '12-2', '12-3', '12-4', '12-5',
+  'Korespoden',
+  'Berita',
+  'Media',
+  'Dokumentasi - Photografi',
+  'Dokumentasi - Videografi',
 ]
 
 // Email domain used for username-based auth

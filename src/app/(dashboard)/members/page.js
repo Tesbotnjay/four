@@ -219,7 +219,7 @@ export default function MembersPage() {
     },
     { header: 'Nama', accessor: 'full_name' },
     { header: 'NIS/NISN', accessor: 'nis_nisn' },
-    { header: 'Kelas', accessor: 'kelas' },
+    { header: 'Divisi', accessor: 'kelas' },
     { header: 'Username', accessor: 'username' },
     { header: 'Jabatan', accessor: 'jabatan' },
     { header: 'Role', accessor: (row) => ROLE_LABELS[row.role] || row.role },
@@ -367,7 +367,7 @@ export default function MembersPage() {
           <Input label="Password" name="password" type="password" value={formData.password} onChange={handleInputChange} required />
           <Input label="NIS/NISN" name="nis_nisn" value={formData.nis_nisn} onChange={handleInputChange} />
           
-          <Select label="Kelas" name="kelas" options={[{label: 'Pilih Kelas', value: ''}, ...KELAS_OPTIONS]} value={formData.kelas} onChange={handleInputChange} required />
+          <Select label="Divisi" name="kelas" options={[{label: 'Pilih Divisi', value: ''}, ...KELAS_OPTIONS]} value={formData.kelas} onChange={handleInputChange} required />
           <Input label="No. HP" name="phone" value={formData.phone} onChange={handleInputChange} />
           
           <Select label="Jabatan" name="jabatan" options={[{label: 'Pilih Jabatan', value: ''}, ...JABATAN_OPTIONS]} value={formData.jabatan} onChange={handleInputChange} required />
@@ -386,7 +386,7 @@ export default function MembersPage() {
           <Input label="Username" name="username" value={formData.username} onChange={handleInputChange} required />
           <Input label="NIS/NISN" name="nis_nisn" value={formData.nis_nisn} onChange={handleInputChange} />
           
-          <Select label="Kelas" name="kelas" options={[{label: 'Pilih Kelas', value: ''}, ...KELAS_OPTIONS]} value={formData.kelas} onChange={handleInputChange} required />
+          <Select label="Divisi" name="kelas" options={[{label: 'Pilih Divisi', value: ''}, ...KELAS_OPTIONS]} value={formData.kelas} onChange={handleInputChange} required />
           <Input label="No. HP" name="phone" value={formData.phone} onChange={handleInputChange} />
           
           <Select label="Jabatan" name="jabatan" options={[{label: 'Pilih Jabatan', value: ''}, ...JABATAN_OPTIONS]} value={formData.jabatan} onChange={handleInputChange} required />

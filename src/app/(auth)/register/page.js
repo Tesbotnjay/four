@@ -39,7 +39,7 @@ export default function RegisterPage() {
     const newErrors = {};
     if (!formData.namaLengkap) newErrors.namaLengkap = 'Nama lengkap wajib diisi';
     if (!formData.nis) newErrors.nis = 'NIS/NISN wajib diisi';
-    if (!formData.kelas) newErrors.kelas = 'Kelas wajib dipilih';
+    if (!formData.kelas) newErrors.kelas = 'Divisi wajib dipilih';
     if (!formData.noHp) newErrors.noHp = 'Nomor HP wajib diisi';
     
     if (!formData.username) {
@@ -71,19 +71,20 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      const submitData = new FormData();
-      Object.keys(formData).forEach(key => {
-        submitData.append(key, formData[key]);
-      });
-
-      const fileInput = document.getElementById('foto');
-      if (fileInput && fileInput.files[0]) {
-        submitData.append('foto', fileInput.files[0]);
-      }
+      const submitData = {
+        full_name: formData.namaLengkap,
+        username: formData.username,
+        password: formData.password,
+        nis_nisn: formData.nis,
+        kelas: formData.kelas,
+        phone: formData.noHp,
+        join_reason: formData.alasan || '',
+      };
 
       const res = await fetch('/api/auth/register', {
         method: 'POST',
-        body: submitData,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submitData),
       });
 
       const result = await res.json();
@@ -145,7 +146,7 @@ export default function RegisterPage() {
             <Select
               id="kelas"
               name="kelas"
-              label="Kelas"
+              label="Divisi"
               options={KELAS_OPTIONS || []}
               value={formData.kelas}
               onChange={handleChange}

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/Button'
-import { Newspaper, Users, Camera, Mic, Radio, Calendar, MapPin, ChevronRight } from 'lucide-react'
+import { Newspaper, Users, Camera, Mic, Radio, Calendar, MapPin, ChevronRight, ExternalLink } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import styles from './page.module.css'
 
@@ -144,10 +144,36 @@ export default function LandingPage() {
         </section>
       )}
 
-      <section id="tentang" className={styles.section}>
+      <section id="tentang" className={styles.section} style={{ paddingBottom: 0 }}>
         <h2 className={styles.sectionTitle}>TENTANG JURNFOURTEEN</h2>
         <div className={styles.aboutContent}>
           <p>JurnFourteen adalah ekstrakurikuler jurnalistik yang berfokus pada pengembangan bakat siswa dalam bidang jurnalistik, fotografi, videografi, dan public speaking.</p>
+          <div style={{ marginTop: '2rem' }}>
+            <a href="#" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+              <Button variant="primary" style={{ padding: '0.75rem 2rem', fontSize: '1.1rem' }}>
+                <ExternalLink size={18} style={{ marginRight: '8px' }} /> KUNJUNGI LINKTREE KAMI
+              </Button>
+            </a>
+          </div>
+        </div>
+
+        <div className={styles.marqueeContainer}>
+          <div className={styles.marqueeTrack}>
+            {[
+              'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&q=80',
+              'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=500&q=80',
+              'https://images.unsplash.com/photo-1511649475669-e288648b2339?w=500&q=80',
+              'https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&q=80',
+              'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&q=80',
+              'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=500&q=80',
+              'https://images.unsplash.com/photo-1511649475669-e288648b2339?w=500&q=80',
+              'https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&q=80'
+            ].map((img, i) => (
+              <div key={i} className={styles.marqueeImageWrapper}>
+                <img src={img} alt={`Gallery ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -160,8 +186,20 @@ export default function LandingPage() {
               <div className={styles.statLabel}>Anggota Aktif</div>
             </Link>
           </div>
-          <div className={styles.statCard}><Newspaper size={48} strokeWidth={3} /><div className={styles.statValue}>{stats.edisi}</div><div className={styles.statLabel}>Edisi Terbit</div></div>
-          <div className={styles.statCard}><Camera size={48} strokeWidth={3} /><div className={styles.statValue}>{stats.liputan}</div><div className={styles.statLabel}>Liputan</div></div>
+          <div className={styles.statCard}>
+            <Link href="#" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }}>
+              <Newspaper size={48} strokeWidth={3} />
+              <div className={styles.statValue}>{stats.edisi}</div>
+              <div className={styles.statLabel}>Edisi Terbit</div>
+            </Link>
+          </div>
+          <div className={styles.statCard}>
+            <Link href="#" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }}>
+              <Camera size={48} strokeWidth={3} />
+              <div className={styles.statValue}>{stats.liputan}</div>
+              <div className={styles.statLabel}>Liputan</div>
+            </Link>
+          </div>
         </div>
       </section>
 

@@ -58,7 +58,7 @@ export async function POST(request) {
       .from('members')
       .insert([
         {
-          id: authUser.id,
+          user_id: authUser.id,
           username,
           full_name,
           nis_nisn,
