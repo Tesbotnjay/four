@@ -171,18 +171,99 @@ export default function ReportsPage() {
         )}
 
         {activeTab === 'bulanan' && (
-          <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-            <BarChart3 size={48} style={{ margin: '0 auto 1rem' }} />
-            <p style={{ fontWeight: 700, fontSize: '1.125rem' }}>Rekap Bulanan</p>
-            <p>Rekap bulanan akan tersedia setelah ada cukup data kehadiran.</p>
+          <div style={{ padding: '2rem', textAlign: 'center' }}>
+            <BarChart3 size={48} style={{ margin: '0 auto 1rem', color: 'var(--primary)' }} />
+            <p style={{ fontWeight: 800, fontSize: '1.25rem', marginBottom: '0.5rem' }}>Laporan Bulanan Pembina</p>
+            <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Unduh rekapitulasi kehadiran berdasarkan bulan dalam bentuk matriks kegiatan.</p>
+            
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '2rem', maxWidth: '400px', margin: '0 auto 2rem' }}>
+              <Select 
+                label="Bulan" 
+                value={new Date().getMonth() + 1} 
+                onChange={(e) => document.getElementById('monthSelect').value = e.target.value}
+                id="monthSelect"
+                options={[
+                  {value: 1, label: 'Januari'}, {value: 2, label: 'Februari'}, {value: 3, label: 'Maret'},
+                  {value: 4, label: 'April'}, {value: 5, label: 'Mei'}, {value: 6, label: 'Juni'},
+                  {value: 7, label: 'Juli'}, {value: 8, label: 'Agustus'}, {value: 9, label: 'September'},
+                  {value: 10, label: 'Oktober'}, {value: 11, label: 'November'}, {value: 12, label: 'Desember'}
+                ]}
+              />
+              <Select 
+                label="Tahun" 
+                value={new Date().getFullYear()} 
+                onChange={(e) => document.getElementById('yearSelect').value = e.target.value}
+                id="yearSelect"
+                options={[
+                  {value: 2024, label: '2024'}, {value: 2025, label: '2025'}, {value: 2026, label: '2026'}, {value: 2027, label: '2027'}
+                ]}
+              />
+            </div>
+
+            <Button 
+              variant="primary" 
+              onClick={async () => {
+                setExporting(true)
+                try {
+                  const m = document.getElementById('monthSelect').value || (new Date().getMonth() + 1)
+                  const y = document.getElementById('yearSelect').value || new Date().getFullYear()
+                  const res = await fetch(`/api/reports/attendance/excel-monthly?month=${m}&year=${y}`)
+                  if (!res.ok) {
+                    const json = await res.json()
+                    throw new Error(json.error || 'Gagal mengunduh rekap bulanan')
+                  }
+                  const blob = await res.blob()
+                  const a = document.createElement('a')
+                  a.href = URL.createObjectURL(blob)
+                  a.download = `Rekap_Bulanan_${m}_${y}.xlsx`
+                  a.click()
+                  URL.revokeObjectURL(a.href)
+                  addToast('Export Laporan Bulanan berhasil!', 'success')
+                } catch (err) {
+                  addToast(err.message, 'error')
+                } finally {
+                  setExporting(false)
+                }
+              }} 
+              loading={exporting}
+              style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}
+            >
+              <Download size={20} style={{ marginRight: '8px' }} /> DOWNLOAD LAPORAN BULANAN
+            </Button>
           </div>
         )}
 
         {activeTab === 'anggota' && (
-          <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-            <BarChart3 size={48} style={{ margin: '0 auto 1rem' }} />
-            <p style={{ fontWeight: 700, fontSize: '1.125rem' }}>Rekap Per Anggota</p>
-            <p>Rekap per anggota akan tersedia setelah ada cukup data kehadiran.</p>
+          <div style={{ padding: '2rem', textAlign: 'center' }}>
+            <BarChart3 size={48} style={{ margin: '0 auto 1rem', color: 'var(--primary)' }} />
+            <p style={{ fontWeight: 800, fontSize: '1.25rem', marginBottom: '0.5rem' }}>Rekapitulasi Keseluruhan</p>
+            <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Unduh data akumulasi kehadiran, izin, sakit, dan alfa seluruh anggota sepanjang waktu dalam format Excel.</p>
+            
+            <Button 
+              variant="primary" 
+              onClick={async () => {
+                setExporting(true)
+                try {
+                  const res = await fetch('/api/reports/attendance/excel-global')
+                  if (!res.ok) throw new Error('Gagal mengunduh rekap global')
+                  const blob = await res.blob()
+                  const a = document.createElement('a')
+                  a.href = URL.createObjectURL(blob)
+                  a.download = `Rekap_Global_Kehadiran.xlsx`
+                  a.click()
+                  URL.revokeObjectURL(a.href)
+                  addToast('Export Excel Global berhasil!', 'success')
+                } catch (err) {
+                  addToast(err.message, 'error')
+                } finally {
+                  setExporting(false)
+                }
+              }} 
+              loading={exporting}
+              style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}
+            >
+              <Download size={20} style={{ marginRight: '8px' }} /> DOWNLOAD EXCEL GLOBAL
+            </Button>
           </div>
         )}
       </div>
