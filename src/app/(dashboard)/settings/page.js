@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '@/lib/auth/AuthContext'
 import { useToast } from '@/components/ui/Toast'
 import { Card, Button, Input, Badge, LoadingSpinner } from '@/components/ui'
-import { Settings as SettingsIcon, Save, Send, Bell, Image, Globe } from 'lucide-react'
+import { Settings as SettingsIcon, Save, Send, Bell, Image, Globe, Upload } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 import styles from './settings.module.css'
 
 export default function SettingsPage() {
@@ -13,6 +14,9 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState('telegram')
   const [settings, setSettings] = useState({})
   const [loading, setLoading] = useState(true)
+  const [uploadingMarquee, setUploadingMarquee] = useState(false)
+  const marqueeInputRef = useRef(null)
+  const supabase = createClient()
   const [saving, setSaving] = useState(false)
   const [testing, setTesting] = useState(false)
 
@@ -70,6 +74,82 @@ export default function SettingsPage() {
       addToast(`Test gagal: ${err.message}`, 'error')
     } finally {
       setTesting(false)
+    }
+  }
+
+  const compressImage = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (event) => {
+        const img = new window.Image()
+        img.src = event.target.result
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          const MAX_SIZE = 1200
+          let width = img.width
+          let height = img.height
+          if (width > height) {
+            if (width > MAX_SIZE) {
+              height *= MAX_SIZE / width
+              width = MAX_SIZE
+            }
+          } else {
+            if (height > MAX_SIZE) {
+              width *= MAX_SIZE / height
+              height = MAX_SIZE
+            }
+          }
+          canvas.width = width
+          canvas.height = height
+          const ctx = canvas.getContext('2d')
+          ctx.drawImage(img, 0, 0, width, height)
+          canvas.toBlob((blob) => resolve(blob), 'image/webp', 0.80)
+        }
+        img.onerror = (e) => reject(e)
+      }
+      reader.onerror = (e) => reject(e)
+    })
+  }
+
+  const handleUploadMarquee = async (e) => {
+    const files = e.target.files
+    if (!files || files.length === 0) return
+
+    setUploadingMarquee(true)
+    try {
+      const newUrls = []
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        const compressedBlob = await compressImage(file)
+        const fileName = `marquee-${Date.now()}-${Math.random().toString(36).substring(7)}.webp`
+        const filePath = `marquee/${fileName}`
+
+        const { error: uploadError } = await supabase.storage
+          .from('gallery')
+          .upload(filePath, compressedBlob, { contentType: 'image/webp' })
+
+        if (uploadError) throw uploadError
+
+        const { data: publicUrlData } = supabase.storage
+          .from('gallery')
+          .getPublicUrl(filePath)
+        
+        newUrls.push(publicUrlData.publicUrl)
+      }
+
+      // Update text area
+      const existing = settings.landing_marquee ? settings.landing_marquee.split(',').map(s=>s.trim()).filter(Boolean) : []
+      const combined = [...existing, ...newUrls].join(', ')
+      setSettings({ ...settings, landing_marquee: combined })
+      
+      addToast(`${files.length} foto berhasil diunggah ke Album Kenangan!`, 'success')
+      // Reset input
+      if (marqueeInputRef.current) marqueeInputRef.current.value = ''
+    } catch (err) {
+      addToast(`Gagal mengunggah foto: ${err.message}`, 'error')
+    } finally {
+      setUploadingMarquee(false)
     }
   }
 
@@ -293,9 +373,31 @@ export default function SettingsPage() {
               value={settings.landing_marquee || ''}
               onChange={(e) => setSettings({ ...settings, landing_marquee: e.target.value })}
             />
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-              Masukkan tautan (URL) foto-foto yang akan muncul di galeri animasi berjalan, pisahkan dengan tanda koma.
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.75rem' }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: 0 }}>
+                Kamu bisa mengetik URL secara manual atau unggah foto langsung dari perangkat (foto akan dikompres otomatis).
+              </p>
+              <div>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  multiple 
+                  style={{ display: 'none' }} 
+                  ref={marqueeInputRef}
+                  onChange={handleUploadMarquee}
+                />
+                <Button 
+                  variant="secondary" 
+                  size="sm" 
+                  type="button" 
+                  onClick={() => marqueeInputRef.current?.click()}
+                  loading={uploadingMarquee}
+                >
+                  <Upload size={14} style={{ marginRight: '6px' }} />
+                  Unggah Foto
+                </Button>
+              </div>
+            </div>
           </div>
 
           <Button
