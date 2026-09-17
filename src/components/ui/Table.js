@@ -24,7 +24,7 @@ const Table = ({ columns, data, loading, emptyMessage = 'Tidak ada data.' }) => 
               <tr key={rowIndex}>
                 {columns.map((col, colIndex) => (
                   <td key={colIndex}>
-                    {col.render ? col.render(row) : row[col.key]}
+                    {col.render ? col.render(row, rowIndex) : row[col.key]}
                   </td>
                 ))}
               </tr>

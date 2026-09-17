@@ -74,15 +74,15 @@ export default function MemberVerificationPage() {
   }
 
   const columns = [
-    { header: 'No', accessor: (row, idx) => idx + 1 },
-    { header: 'Nama', accessor: 'full_name' },
-    { header: 'Username', accessor: 'username' },
-    { header: 'Divisi', accessor: 'kelas' },
-    { header: 'NIS/NISN', accessor: 'nis_nisn' },
-    { header: 'Tgl Daftar', accessor: (row) => new Date(row.created_at).toLocaleDateString('id-ID') },
+    { label: 'No', render: (row, idx) => idx + 1 },
+    { label: 'Nama', key: 'full_name' },
+    { label: 'Username', key: 'username' },
+    { label: 'Divisi', key: 'kelas' },
+    { label: 'NIS/NISN', key: 'nis_nisn' },
+    { label: 'Tgl Daftar', render: (row) => new Date(row.created_at).toLocaleDateString('id-ID') },
     {
-      header: 'Aksi',
-      accessor: (row) => (
+      label: 'Aksi',
+      render: (row) => (
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <Button size="sm" variant="success" onClick={() => handleVerify(row.id, 'terima')} disabled={actionLoading}>
             <Check size={14} style={{ marginRight: '4px' }} /> Terima
