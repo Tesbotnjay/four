@@ -210,7 +210,7 @@ export default function VerificationPage() {
       render: (row) => {
         if (row.status === 'belum') {
           return (
-            <Button size="sm" variant="danger" onClick={() => handleMarkAlfa([row.members.id])} disabled={actionLoading}>
+            <Button size="sm" variant="danger" onClick={() => handleMarkAlfa([row.member_id])} disabled={actionLoading}>
               <X size={14} /> Alfakan
             </Button>
           )
@@ -352,7 +352,7 @@ export default function VerificationPage() {
             <Button 
               variant="danger" 
               disabled={filteredData.length === 0 || actionLoading}
-              onClick={() => handleMarkAlfa(filteredData.map(d => d.members.id))}
+              onClick={() => handleMarkAlfa(filteredData.map(d => d.member_id))}
             >
               <X size={16} style={{marginRight: '6px'}}/> ALFAKAN SEMUA ({filteredData.length})
             </Button>
