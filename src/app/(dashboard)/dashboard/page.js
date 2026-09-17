@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { LoadingSpinner, Card, Button, Badge } from '@/components/ui';
 import { 
   Users, Check, FileText, Heart, X, UserPlus, Clock, Calendar, 
-  Plus, Radio as RadioIcon, ClipboardCheck, ArrowRight
+  Plus, Radio as RadioIcon, ClipboardCheck, ArrowRight, UserCheck
 } from 'lucide-react';
 import Link from 'next/link';
 import LandingStatsEditor from '@/components/LandingStatsEditor';
@@ -176,6 +176,9 @@ export default function DashboardPage() {
             </Link>
             <Link href="/attendance/verification">
               <Button variant="outline" className={styles.actionBtn}><ClipboardCheck size={20} /> Lihat Verifikasi</Button>
+            </Link>
+            <Link href="/members/verification">
+              <Button variant="outline" className={styles.actionBtn}><UserCheck size={20} /> Verifikasi Anggota</Button>
             </Link>
           </div>
         </>
