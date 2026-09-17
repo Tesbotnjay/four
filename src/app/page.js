@@ -13,7 +13,17 @@ export default function LandingPage() {
   const [broadcasts, setBroadcasts] = useState([])
   const [currentBc, setCurrentBc] = useState(0)
   const [activeCount, setActiveCount] = useState(0)
-  const [stats, setStats] = useState({ edisi: '45', liputan: '320' })
+  const [stats, setStats] = useState({ 
+    edisi: 12, 
+    liputan: 156,
+    linktree: '#',
+    marquee: [
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&q=80',
+      'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=500&q=80',
+      'https://images.unsplash.com/photo-1511649475669-e288648b2339?w=500&q=80',
+      'https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&q=80'
+    ]
+  })
 
   const fetchPublicBroadcasts = async () => {
     try {
@@ -31,11 +41,19 @@ export default function LandingPage() {
         .neq('role', 'super_admin')
       setActiveCount(count || 0)
       
-      const { data } = await supabase.from('settings').select('*').in('key', ['edisi_terbit', 'jumlah_liputan'])
+      const { data } = await supabase.from('settings').select('*').in('key', ['landing_edisi', 'landing_liputan', 'landing_linktree', 'landing_marquee'])
       if (data) {
-        const edisi = data.find(s => s.key === 'edisi_terbit')?.value || '45'
-        const liputan = data.find(s => s.key === 'jumlah_liputan')?.value || '320'
-        setStats({ edisi, liputan })
+        const edisi = data.find(s => s.key === 'landing_edisi')?.value || '12'
+        const liputan = data.find(s => s.key === 'landing_liputan')?.value || '156'
+        const linktree = data.find(s => s.key === 'landing_linktree')?.value || '#'
+        
+        let marquee = []
+        const marqueeStr = data.find(s => s.key === 'landing_marquee')?.value
+        if (marqueeStr) {
+          marquee = marqueeStr.split(',').map(s => s.trim()).filter(Boolean)
+        }
+        
+        setStats({ edisi, liputan, linktree, marquee })
       }
     } catch (e) {}
   }
@@ -149,7 +167,7 @@ export default function LandingPage() {
         <div className={styles.aboutContent}>
           <p>JurnFourteen adalah ekstrakurikuler jurnalistik yang berfokus pada pengembangan bakat siswa dalam bidang jurnalistik, fotografi, videografi, dan public speaking.</p>
           <div style={{ marginTop: '2rem' }}>
-            <a href="#" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+            <a href={stats.linktree || '#'} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
               <Button variant="primary" style={{ padding: '0.75rem 2rem', fontSize: '1.1rem' }}>
                 <ExternalLink size={18} style={{ marginRight: '8px' }} /> KUNJUNGI LINKTREE KAMI
               </Button>
@@ -157,24 +175,17 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className={styles.marqueeContainer}>
-          <div className={styles.marqueeTrack}>
-            {[
-              'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&q=80',
-              'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=500&q=80',
-              'https://images.unsplash.com/photo-1511649475669-e288648b2339?w=500&q=80',
-              'https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&q=80',
-              'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&q=80',
-              'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=500&q=80',
-              'https://images.unsplash.com/photo-1511649475669-e288648b2339?w=500&q=80',
-              'https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&q=80'
-            ].map((img, i) => (
-              <div key={i} className={styles.marqueeImageWrapper}>
-                <img src={img} alt={`Gallery ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-            ))}
+        {stats.marquee && stats.marquee.length > 0 && (
+          <div className={styles.marqueeContainer}>
+            <div className={styles.marqueeTrack}>
+              {[...stats.marquee, ...stats.marquee].map((img, i) => (
+                <div key={i} className={styles.marqueeImageWrapper}>
+                  <img src={img} alt={`Gallery ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       <section id="stats" className={`${styles.section} ${styles.statsSection}`}>

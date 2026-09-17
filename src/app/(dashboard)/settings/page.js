@@ -79,7 +79,8 @@ export default function SettingsPage() {
     { id: 'telegram', label: 'Telegram', icon: Send },
     { id: 'notifications', label: 'Notifikasi', icon: Bell },
     { id: 'branding', label: 'Branding', icon: Image },
-    { id: 'general', label: 'Umum', icon: Globe },
+    { id: 'landing', label: 'Halaman Umum', icon: Globe },
+    { id: 'general', label: 'Sistem', icon: SettingsIcon },
   ]
 
   return (
@@ -249,6 +250,67 @@ export default function SettingsPage() {
           >
             <Save size={16} />
             SIMPAN BRANDING
+          </Button>
+        </Card>
+      )}
+
+      {activeTab === 'landing' && (
+        <Card className={styles.settingsCard}>
+          <h2>Halaman Umum</h2>
+          <p style={{ color: 'var(--text-muted)' }}>Sesuaikan konten yang tampil di halaman depan publik.</p>
+
+          <div className="form-group" style={{ marginTop: '1.5rem' }}>
+            <Input
+              label="Angka Edisi Terbit"
+              type="number"
+              value={settings.landing_edisi || ''}
+              onChange={(e) => setSettings({ ...settings, landing_edisi: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <Input
+              label="Angka Liputan"
+              type="number"
+              value={settings.landing_liputan || ''}
+              onChange={(e) => setSettings({ ...settings, landing_liputan: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <Input
+              label="URL Linktree (Sosmed)"
+              placeholder="https://linktr.ee/..."
+              value={settings.landing_linktree || ''}
+              onChange={(e) => setSettings({ ...settings, landing_linktree: e.target.value })}
+            />
+          </div>
+          
+          <div className="form-group">
+            <label className="form-label">Album Kenangan (URL Foto dipisahkan koma)</label>
+            <textarea
+              className="select"
+              style={{ width: '100%', minHeight: '100px', resize: 'vertical', padding: '0.75rem', fontFamily: 'inherit' }}
+              placeholder="https://unsplash.com/foto1.jpg, https://unsplash.com/foto2.jpg"
+              value={settings.landing_marquee || ''}
+              onChange={(e) => setSettings({ ...settings, landing_marquee: e.target.value })}
+            />
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+              Masukkan tautan (URL) foto-foto yang akan muncul di galeri animasi berjalan, pisahkan dengan tanda koma.
+            </p>
+          </div>
+
+          <Button
+            variant="primary"
+            onClick={() => handleSave({
+              landing_edisi: settings.landing_edisi,
+              landing_liputan: settings.landing_liputan,
+              landing_linktree: settings.landing_linktree,
+              landing_marquee: settings.landing_marquee,
+            })}
+            loading={saving}
+            style={{ marginTop: '1rem' }}
+          >
+            <Save size={16} />
+            SIMPAN HALAMAN UMUM
           </Button>
         </Card>
       )}

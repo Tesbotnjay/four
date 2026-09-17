@@ -114,13 +114,35 @@ export async function DELETE(request, { params }) {
   try {
     const supabase = await createServiceClient()
     const { id } = await params
+    const { searchParams } = new URL(request.url)
+    const reason = searchParams.get('reason')
+    const isReject = searchParams.get('reject') === 'true'
 
-    // Get member data first for logging
+    // Get member data first for logging and deleting auth
     const { data: member } = await supabase
       .from('members')
-      .select('full_name, user_id')
+      .select('full_name, user_id, username')
       .eq('id', id)
       .single()
+
+    if (isReject) {
+      // Hard delete from auth.users (cascades to members)
+      if (member?.user_id) {
+        await supabase.auth.admin.deleteUser(member.user_id)
+      } else {
+        // Fallback delete from members if no auth user
+        await supabase.from('members').delete().eq('id', id)
+      }
+
+      // Log activity
+      await supabase.from('activity_logs').insert({
+        action: 'Tolak Pendaftar',
+        details: `Menolak pendaftar ${member?.full_name || member?.username} dengan alasan: ${reason || 'Tidak ada alasan'}`,
+        member_name: 'Super Admin',
+      })
+
+      return NextResponse.json({ message: 'Pendaftar berhasil ditolak dan dihapus' })
+    }
 
     // Soft delete - set status to nonaktif
     const { error } = await supabase
@@ -140,7 +162,7 @@ export async function DELETE(request, { params }) {
     return NextResponse.json({ message: 'Anggota berhasil dinonaktifkan' })
   } catch (error) {
     return NextResponse.json(
-      { error: error.message || 'Gagal menonaktifkan anggota' },
+      { error: error.message || 'Gagal menghapus/menonaktifkan anggota' },
       { status: 500 }
     )
   }

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import {
-  Button, Card, Badge, Table, LoadingSpinner, EmptyState
+  Button, Card, Badge, Table, LoadingSpinner, EmptyState, Modal, Input
 } from '@/components/ui'
 import { useToast } from '@/components/ui/Toast'
 import { Check, X, UserCheck } from 'lucide-react'
@@ -38,10 +38,16 @@ export default function MemberVerificationPage() {
     fetchPendingMembers()
   }, [])
 
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false)
+  const [rejectReason, setRejectReason] = useState('')
+  const [selectedId, setSelectedId] = useState(null)
+
   const handleVerify = async (id, action) => {
     if (action === 'tolak') {
-      const confirm = window.confirm('Apakah Anda yakin ingin menolak dan menghapus pendaftar ini secara permanen?')
-      if (!confirm) return
+      setSelectedId(id)
+      setRejectReason('')
+      setIsRejectModalOpen(true)
+      return
     }
 
     setActionLoading(true)
@@ -54,17 +60,28 @@ export default function MemberVerificationPage() {
         })
         if (!res.ok) throw new Error('Gagal memverifikasi anggota')
         addToast('Anggota berhasil diterima dan diaktifkan!', 'success')
-      } else if (action === 'tolak') {
-        // We'll assume there is a DELETE endpoint or we just change status to nonaktif
-        // Let's use PUT to change status to 'nonaktif' for now to keep it safe
-        const res = await fetch(`/api/members/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: 'nonaktif' })
-        })
-        if (!res.ok) throw new Error('Gagal menolak anggota')
-        addToast('Pendaftaran ditolak.', 'success')
+        fetchPendingMembers()
       }
+    } catch (error) {
+      addToast(error.message, 'error')
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const submitReject = async () => {
+    if (!rejectReason.trim()) {
+      addToast('Alasan penolakan harus diisi', 'error')
+      return
+    }
+    setActionLoading(true)
+    try {
+      const res = await fetch(`/api/members/${selectedId}?reject=true&reason=${encodeURIComponent(rejectReason)}`, {
+        method: 'DELETE',
+      })
+      if (!res.ok) throw new Error('Gagal menolak anggota')
+      addToast('Pendaftaran ditolak dan pendaftar telah dihapus.', 'success')
+      setIsRejectModalOpen(false)
       fetchPendingMembers()
     } catch (error) {
       addToast(error.message, 'error')
@@ -121,6 +138,25 @@ export default function MemberVerificationPage() {
           <Table columns={columns} data={members} />
         )}
       </Card>
+
+      <Modal isOpen={isRejectModalOpen} onClose={() => setIsRejectModalOpen(false)} title="Tolak Pendaftar">
+        <div style={{ marginBottom: '1.5rem' }}>
+          <p style={{ marginBottom: '1rem', color: 'var(--text-secondary)' }}>
+            Masukkan alasan penolakan. Pendaftar ini akan dihapus dari sistem agar dapat mendaftar ulang.
+          </p>
+          <Input 
+            label="Alasan Penolakan" 
+            placeholder="Contoh: Data NIS salah, silakan daftar ulang" 
+            value={rejectReason}
+            onChange={(e) => setRejectReason(e.target.value)}
+            required
+          />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+          <Button variant="secondary" onClick={() => setIsRejectModalOpen(false)}>Batal</Button>
+          <Button variant="danger" onClick={submitReject} loading={actionLoading}>Tolak & Hapus</Button>
+        </div>
+      </Modal>
     </div>
   )
 }
