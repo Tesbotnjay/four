@@ -261,7 +261,29 @@ export default function VerificationPage() {
               }
             }}
           >
-            <Download size={16} style={{marginRight: '8px'}} /> Bulan Ini
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            disabled={!selectedActivity || isExporting}
+            onClick={async () => {
+              setIsExporting(true)
+              try {
+                const res = await fetch(`/api/reports/attendance/excel?activity_id=${selectedActivity}`)
+                if (!res.ok) throw new Error('Gagal unduh')
+                const blob = await res.blob()
+                const a = document.createElement('a')
+                a.href = URL.createObjectURL(blob)
+                a.download = `Rekap_Kegiatan.xlsx`
+                a.click()
+              } catch (e) {
+                addToast(e.message, 'error')
+              } finally {
+                setIsExporting(false)
+              }
+            }}
+          >
+            <Download size={16} style={{marginRight: '8px'}} /> Kegiatan Ini
           </Button>
           <ConnectionIndicator isConnected={isConnected} />
         </div>
