@@ -12,13 +12,20 @@ export async function POST(request) {
       return NextResponse.json({ error: 'activity_id dan member_ids (array) wajib diisi' }, { status: 400 })
     }
 
+    // Get real member.id of the verifier
+    let realVerifierId = null
+    if (verified_by) {
+      const { data: vMember } = await supabase.from('members').select('id').eq('user_id', verified_by).single()
+      if (vMember) realVerifierId = vMember.id
+    }
+
     // Prepare data for bulk insert
     const insertData = member_ids.map(m_id => ({
       activity_id,
       member_id: m_id,
       response: null,
       final_status: 'alfa',
-      verified_by: verified_by || null,
+      verified_by: realVerifierId,
       verified_at: new Date().toISOString()
     }))
 
