@@ -291,7 +291,7 @@ export default function MembersPage() {
         </div>
         <div className={styles.filterSelect}>
           <Select 
-            options={[{label: 'Semua Kelas', value: ''}, ...KELAS_OPTIONS]} 
+            options={[{label: 'Semua Divisi', value: ''}, ...KELAS_OPTIONS.map(opt => ({ label: opt, value: opt }))]} 
             value={kelasFilter} 
             onChange={(e) => {
               setKelasFilter(e.target.value)
@@ -367,10 +367,10 @@ export default function MembersPage() {
           <Input label="Password" name="password" type="password" value={formData.password} onChange={handleInputChange} required />
           <Input label="NIS/NISN" name="nis_nisn" value={formData.nis_nisn} onChange={handleInputChange} />
           
-          <Select label="Divisi" name="kelas" options={[{label: 'Pilih Divisi', value: ''}, ...KELAS_OPTIONS]} value={formData.kelas} onChange={handleInputChange} required />
+          <Select label="Divisi" name="kelas" options={[{label: 'Pilih Divisi', value: ''}, ...KELAS_OPTIONS.map(opt => ({ label: opt, value: opt }))]} value={formData.kelas} onChange={handleInputChange} required />
           <Input label="No. HP" name="phone" value={formData.phone} onChange={handleInputChange} />
           
-          <Select label="Jabatan" name="jabatan" options={[{label: 'Pilih Jabatan', value: ''}, ...JABATAN_OPTIONS]} value={formData.jabatan} onChange={handleInputChange} required />
+          <Select label="Jabatan" name="jabatan" options={[{label: 'Pilih Jabatan', value: ''}, ...JABATAN_OPTIONS.map(opt => ({ label: opt, value: opt }))]} value={formData.jabatan} onChange={handleInputChange} required />
           <Select label="Role" name="role" options={[{label: 'Pilih Role', value: ''}, ...ROLE_OPTIONS.filter(r => r.value)]} value={formData.role} onChange={handleInputChange} required />
         </form>
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>
@@ -386,10 +386,10 @@ export default function MembersPage() {
           <Input label="Username" name="username" value={formData.username} onChange={handleInputChange} required />
           <Input label="NIS/NISN" name="nis_nisn" value={formData.nis_nisn} onChange={handleInputChange} />
           
-          <Select label="Divisi" name="kelas" options={[{label: 'Pilih Divisi', value: ''}, ...KELAS_OPTIONS]} value={formData.kelas} onChange={handleInputChange} required />
+          <Select label="Divisi" name="kelas" options={[{label: 'Pilih Divisi', value: ''}, ...KELAS_OPTIONS.map(opt => ({ label: opt, value: opt }))]} value={formData.kelas} onChange={handleInputChange} required />
           <Input label="No. HP" name="phone" value={formData.phone} onChange={handleInputChange} />
           
-          <Select label="Jabatan" name="jabatan" options={[{label: 'Pilih Jabatan', value: ''}, ...JABATAN_OPTIONS]} value={formData.jabatan} onChange={handleInputChange} required />
+          <Select label="Jabatan" name="jabatan" options={[{label: 'Pilih Jabatan', value: ''}, ...JABATAN_OPTIONS.map(opt => ({ label: opt, value: opt }))]} value={formData.jabatan} onChange={handleInputChange} required />
           <Select label="Role" name="role" options={[{label: 'Pilih Role', value: ''}, ...ROLE_OPTIONS.filter(r => r.value)]} value={formData.role} onChange={handleInputChange} required />
         </form>
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>

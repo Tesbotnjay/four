@@ -357,7 +357,7 @@ export default function VerificationPage() {
               <X size={16} style={{marginRight: '6px'}}/> ALFAKAN SEMUA ({filteredData.length})
             </Button>
           )}
-          <Select options={[{label: 'Semua Kelas', value: ''}, ...KELAS_OPTIONS]} value={kelasFilter} onChange={(e) => setKelasFilter(e.target.value)} />
+          <Select options={[{label: 'Semua Divisi', value: ''}, ...KELAS_OPTIONS.map(opt => ({ label: opt, value: opt }))]} value={kelasFilter} onChange={(e) => setKelasFilter(e.target.value)} />
           <Input placeholder="Cari nama..." value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
       </div>

@@ -147,7 +147,7 @@ export default function RegisterPage() {
               id="kelas"
               name="kelas"
               label="Divisi"
-              options={KELAS_OPTIONS || []}
+              options={KELAS_OPTIONS.map(opt => ({ label: opt, value: opt }))}
               value={formData.kelas}
               onChange={handleChange}
               error={errors.kelas}
