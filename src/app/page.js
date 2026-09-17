@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/Button'
@@ -73,6 +73,17 @@ export default function LandingPage() {
     }, 5000)
     return () => clearInterval(timer)
   }, [broadcasts.length])
+
+  // Ensure we have enough images to fill the screen for a smooth infinite scroll.
+  // If there are very few images, we repeat the array until it has at least 10 items.
+  const safeMarquee = useMemo(() => {
+    if (!stats.marquee || stats.marquee.length === 0) return []
+    let repeated = [...stats.marquee]
+    while (repeated.length < 10) {
+      repeated = [...repeated, ...stats.marquee]
+    }
+    return repeated
+  }, [stats.marquee])
 
   const formatDate = (d) => d ? new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : ''
 
@@ -175,14 +186,23 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {stats.marquee && stats.marquee.length > 0 && (
+        {safeMarquee.length > 0 && (
           <div className={styles.marqueeContainer}>
             <div className={styles.marqueeTrack}>
-              {[...stats.marquee, ...stats.marquee].map((img, i) => (
-                <div key={i} className={styles.marqueeImageWrapper}>
-                  <img src={img} alt={`Gallery ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                </div>
-              ))}
+              <div className={styles.marqueeGroup}>
+                {safeMarquee.map((img, i) => (
+                  <div key={`g1-${i}`} className={styles.marqueeImageWrapper}>
+                    <img src={img} alt={`Gallery ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                ))}
+              </div>
+              <div className={styles.marqueeGroup} aria-hidden="true">
+                {safeMarquee.map((img, i) => (
+                  <div key={`g2-${i}`} className={styles.marqueeImageWrapper}>
+                    <img src={img} alt={`Gallery ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}

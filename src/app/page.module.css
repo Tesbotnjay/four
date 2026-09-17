@@ -183,17 +183,21 @@
   padding: 1.5rem 0;
   margin-top: 3rem;
   display: flex;
-  white-space: nowrap;
 }
 
 .marqueeTrack {
   display: flex;
   gap: 1.5rem;
-  animation: marquee 30s linear infinite;
-  min-width: 200%;
+  width: max-content;
 }
 
-.marqueeTrack:hover {
+.marqueeGroup {
+  display: flex;
+  gap: 1.5rem;
+  animation: scroll 30s linear infinite;
+}
+
+.marqueeTrack:hover .marqueeGroup {
   animation-play-state: paused;
 }
 
@@ -209,9 +213,9 @@
   position: relative;
 }
 
-@keyframes marquee {
+@keyframes scroll {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  100% { transform: translateX(calc(-100% - 1.5rem)); }
 }
 
 .statsSection {
