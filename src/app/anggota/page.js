@@ -18,6 +18,8 @@ export default function AnggotaPage() {
     fetchMembers()
   }, [])
 
+  const [stats, setStats] = useState({})
+
   const fetchMembers = async () => {
     try {
       const supabase = createClient()
@@ -28,6 +30,12 @@ export default function AnggotaPage() {
         .neq('role', 'super_admin')
         .order('full_name', { ascending: true })
       setMembers(data || [])
+      
+      const statsRes = await fetch('/api/public/members-stats')
+      if (statsRes.ok) {
+        const statsJson = await statsRes.json()
+        setStats(statsJson.data || {})
+      }
     } catch (e) {
       console.error(e)
     } finally {
@@ -103,6 +111,25 @@ export default function AnggotaPage() {
               <span className={styles.badgeKelas}>{selectedMember.kelas || '-'}</span>
             </div>
             
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem', marginBottom: '1.5rem', textAlign: 'center' }}>
+              <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '0.5rem' }}>
+                <div style={{ fontWeight: 800, fontSize: '1.25rem', color: '#166534' }}>{stats[selectedMember.id]?.hadir || 0}</div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#15803d' }}>HADIR</div>
+              </div>
+              <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '8px', padding: '0.5rem' }}>
+                <div style={{ fontWeight: 800, fontSize: '1.25rem', color: '#92400e' }}>{stats[selectedMember.id]?.izin || 0}</div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#b45309' }}>IZIN</div>
+              </div>
+              <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '8px', padding: '0.5rem' }}>
+                <div style={{ fontWeight: 800, fontSize: '1.25rem', color: '#1e40af' }}>{stats[selectedMember.id]?.sakit || 0}</div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1d4ed8' }}>SAKIT</div>
+              </div>
+              <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '0.5rem' }}>
+                <div style={{ fontWeight: 800, fontSize: '1.25rem', color: '#991b1b' }}>{stats[selectedMember.id]?.alfa || 0}</div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#b91c1c' }}>ALFA</div>
+              </div>
+            </div>
+
             {selectedMember.bio && (
               <div className={styles.detailBio}>
                 <strong>Bio:</strong>

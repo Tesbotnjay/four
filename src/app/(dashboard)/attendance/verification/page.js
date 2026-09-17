@@ -143,6 +143,23 @@ export default function VerificationPage() {
     finally { setActionLoading(false) }
   }
 
+  // Mark Alfa
+  const handleMarkAlfa = async (memberIds) => {
+    if (!selectedActivity || memberIds.length === 0) return
+    setActionLoading(true)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      const res = await fetch('/api/attendance/mark-alfa', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ activity_id: selectedActivity, member_ids: memberIds, verified_by: session?.user?.id })
+      })
+      if (!res.ok) { const e = await res.json(); throw new Error(e.error || 'Gagal menandai alfa') }
+      addToast(`${memberIds.length} anggota ditandai Alfa`, 'success')
+      fetchAttendanceData()
+    } catch (error) { addToast(error.message, 'error') }
+    finally { setActionLoading(false) }
+  }
+
   const handleSelectAll = (e, data) => {
     if (e.target.checked) setSelectedIds(data.filter(d => d.id && d.status === 'menunggu').map(d => d.id))
     else setSelectedIds([])
@@ -191,6 +208,13 @@ export default function VerificationPage() {
     {
       label: 'Aksi',
       render: (row) => {
+        if (row.status === 'belum') {
+          return (
+            <Button size="sm" variant="danger" onClick={() => handleMarkAlfa([row.members.id])} disabled={actionLoading}>
+              <X size={14} /> Alfakan
+            </Button>
+          )
+        }
         if (!row.id || row.status !== 'menunggu') return '-'
         return (
           <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -324,6 +348,15 @@ export default function VerificationPage() {
           ))}
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+          {activeTab === 'belum' && (
+            <Button 
+              variant="danger" 
+              disabled={filteredData.length === 0 || actionLoading}
+              onClick={() => handleMarkAlfa(filteredData.map(d => d.members.id))}
+            >
+              <X size={16} style={{marginRight: '6px'}}/> ALFAKAN SEMUA ({filteredData.length})
+            </Button>
+          )}
           <Select options={[{label: 'Semua Kelas', value: ''}, ...KELAS_OPTIONS]} value={kelasFilter} onChange={(e) => setKelasFilter(e.target.value)} />
           <Input placeholder="Cari nama..." value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
