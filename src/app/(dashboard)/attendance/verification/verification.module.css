@@ -1,0 +1,110 @@
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.filterBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filterTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filterTabs button {
+  padding: 0.5rem 1rem;
+  border: 3px solid #000;
+  background-color: var(--background);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 0;
+  box-shadow: 2px 2px 0 #000;
+}
+
+.filterTabs button.active {
+  background-color: var(--primary);
+  color: white;
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.filterSelect {
+  min-width: 150px;
+}
+
+.searchInput {
+  min-width: 200px;
+}
+
+.bulkBar {
+  position: sticky;
+  bottom: 0;
+  background-color: var(--background);
+  border-top: 4px solid #000;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.bulkActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.checkboxCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.attendanceCard {
+  border: 3px solid #000;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 4px 4px 0 #000;
+  background-color: white;
+}
+
+.activityInfo {
+  margin-bottom: 1.5rem;
+}

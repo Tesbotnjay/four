@@ -1,0 +1,144 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+  border: 3px solid black;
+  background: white;
+  width: fit-content;
+}
+
+.tabBtn {
+  padding: 12px 24px;
+  font-weight: 800;
+  background: transparent;
+  border: none;
+  border-right: 3px solid black;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.tabBtn:last-child {
+  border-right: none;
+}
+
+.tabBtn:hover {
+  background: var(--bg);
+}
+
+.tabBtnActive {
+  background: var(--secondary);
+}
+
+.content {
+  background: white;
+  border: 3px solid black;
+  box-shadow: 6px 6px 0px black;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.filtersBar {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  background: var(--bg);
+  padding: 16px;
+  border: 2px dashed black;
+}
+
+.actionsBar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.statCard {
+  background: white;
+  border: 2px solid black;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 4px 4px 0px black;
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.statLabel {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.tableWrapper {
+  border: 2px solid black;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  border: 2px solid black;
+  padding: 12px;
+  text-align: left;
+}
+
+.table th {
+  background: var(--primary);
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.table tbody tr:nth-child(even) {
+  background: var(--bg);
+}
+
+@media (max-width: 768px) {
+  .tabs {
+    flex-direction: column;
+    width: 100%;
+  }
+  .tabBtn {
+    border-right: none;
+    border-bottom: 3px solid black;
+  }
+  .tabBtn:last-child {
+    border-bottom: none;
+  }
+}

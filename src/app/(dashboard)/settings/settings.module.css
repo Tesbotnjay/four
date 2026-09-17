@@ -1,0 +1,109 @@
+.settingsPage {
+  max-width: 800px;
+}
+
+.pageTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.75rem;
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+}
+
+.tabBar {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.5rem;
+  border: 3px solid #000;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 4px 4px 0px #000;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  background: var(--surface);
+  border: none;
+  border-right: 2px solid #000;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tab:last-child {
+  border-right: none;
+}
+
+.tab:hover {
+  background: var(--bg-color);
+}
+
+.tabActive {
+  background: var(--primary) !important;
+  color: #fff;
+}
+
+.settingsCard {
+  margin-bottom: 1.5rem;
+}
+
+.settingsCard h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.btnGroup {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.toggleRow:last-of-type {
+  border-bottom: none;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .tabBar {
+    flex-direction: column;
+    box-shadow: 3px 3px 0px #000;
+  }
+
+  .tab {
+    border-right: none;
+    border-bottom: 2px solid #000;
+  }
+
+  .tab:last-child {
+    border-bottom: none;
+  }
+
+  .btnGroup {
+    flex-direction: column;
+  }
+}

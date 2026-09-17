@@ -1,0 +1,185 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.welcomeTitle {
+  font-size: 2rem;
+  font-weight: 900;
+  margin: 0;
+  color: var(--color-primary);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.statIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: var(--color-secondary);
+  border: 3px solid var(--color-border);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.statInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.statLabel {
+  font-weight: 700;
+  color: #666;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+
+.actionsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 4px solid var(--color-border);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.activityCard, .broadcastCard {
+  height: 100%;
+}
+
+.activityContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activityName {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.activityDesc {
+  color: #444;
+  margin: 0;
+}
+
+.activityMeta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.attendanceButtons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+  text-align: center;
+  color: #666;
+  font-weight: 600;
+}
+
+.emptyIcon {
+  color: #ccc;
+  margin-bottom: 1rem;
+}
+
+.broadcastHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.broadcastHeader .sectionTitle {
+  margin-bottom: 0;
+}
+
+.viewAll {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.broadcastList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.broadcastItem {
+  padding: 1rem;
+  border: 3px solid var(--color-border);
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 2px 2px 0 var(--color-border);
+}
+
+.broadcastItem h4 {
+  margin: 0 0 0.5rem 0;
+  font-weight: 800;
+}
+
+.broadcastItem p {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.broadcastItem .time {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #888;
+}
+
+.emptyText {
+  color: #666;
+  font-style: italic;
+}
+
+@media (max-width: 992px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+}

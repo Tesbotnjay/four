@@ -1,0 +1,22 @@
+-- ============================================
+-- JURNFOURTEEN SEED DATA
+-- Run this AFTER the migration has been applied
+-- ============================================
+
+-- NOTE: You must create auth users first via Supabase Auth admin API
+-- or via the register API. This seed assumes users are created
+-- with the following emails (mapped from usernames):
+--
+-- superadmin@jurnfourteen.app  → password: SuperAdmin@2026
+-- admin@jurnfourteen.app       → password: Admin@2026
+-- sekretaris@jurnfourteen.app  → password: Sekretaris@2026
+-- pembina@jurnfourteen.app     → password: Pembina@2026
+-- anggota01@jurnfourteen.app   → password: Anggota@2026
+-- anggota02@jurnfourteen.app   → password: Anggota@2026
+-- anggota03@jurnfourteen.app   → password: Anggota@2026
+-- anggota04@jurnfourteen.app   → password: Anggota@2026
+-- anggota05@jurnfourteen.app   → password: Anggota@2026
+--
+-- Use the seed API route POST /api/seed to create these automatically.
+
+-- IMPORTANT: DO NOT use these passwords in production!

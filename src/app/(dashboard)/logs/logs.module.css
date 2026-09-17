@@ -1,0 +1,115 @@
+.logsPage {
+  max-width: 900px;
+}
+
+.pageTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.75rem;
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 3px solid #000;
+  border-radius: 8px;
+  background: var(--surface);
+  margin-bottom: 1.5rem;
+  box-shadow: 3px 3px 0px #000;
+}
+
+.searchInput {
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9375rem;
+  width: 100%;
+  background: transparent;
+}
+
+.logList {
+  border: 3px solid #000;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 4px 4px 0px #000;
+  background: var(--surface);
+}
+
+.logItem {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 2px solid #eee;
+  align-items: flex-start;
+}
+
+.logItem:last-child {
+  border-bottom: none;
+}
+
+.logItem:hover {
+  background: var(--bg-color);
+}
+
+.logTime {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  white-space: nowrap;
+  min-width: 120px;
+  padding-top: 0.15rem;
+}
+
+.logBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.logAction {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.logUser {
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.logActionText {
+  font-weight: 600;
+}
+
+.logDetails {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.pageInfo {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 640px) {
+  .logItem {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .logTime {
+    min-width: unset;
+  }
+}

@@ -1,0 +1,174 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  background: white;
+  border: 2px solid black;
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 2px 2px 0px black;
+}
+
+.filterBtn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px black;
+}
+
+.filterBtnActive {
+  background: var(--primary);
+  color: white;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  background: white;
+  border: 3px solid black;
+  box-shadow: 6px 6px 0px black;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.activityName {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.infoIcon {
+  width: 16px;
+  height: 16px;
+  stroke-width: 3;
+}
+
+.attendanceStats {
+  background: var(--bg);
+  border: 2px dashed black;
+  padding: 12px;
+  display: flex;
+  justify-content: space-around;
+  margin-top: auto;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statValue {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.statLabel {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.actionBtn {
+  flex: 1;
+}
+
+.respondSection {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background: #f0f7ff;
+  border: 2px dashed var(--primary);
+  border-radius: 8px;
+}
+
+.respondButtons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.respondBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  font-size: 0.8rem;
+  border: 3px solid #000;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #000;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.respondBtn:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 #000; }
+.respondBtn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 #000; }
+.respondBtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: 3px 3px 0 #000; }
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary);
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .respondButtons {
+    flex-direction: column;
+  }
+}
