@@ -231,10 +231,36 @@
   .sidebarMobile.open {
     display: block;
   }
+
+  .topbar {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .pageTitle {
+    font-size: 1rem;
+  }
+
+  .topbarRight {
+    gap: 0.75rem;
+  }
+
+  .backButton {
+    display: none !important;
+  }
 }
 
 @media (min-width: 480px) {
   .userName {
     display: block;
+  }
+}
+
+@media (max-width: 375px) {
+  .pageTitle {
+    font-size: 0.9rem;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }

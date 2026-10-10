@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from '@/components/ui/Button'
-import { Newspaper, Users, Camera, Mic, Radio, Calendar, MapPin, ChevronRight, ExternalLink } from 'lucide-react'
+import { Newspaper, Users, Camera, Mic, Radio, Calendar, MapPin, ChevronRight, ExternalLink, Menu, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import styles from './page.module.css'
 
@@ -13,6 +13,7 @@ export default function LandingPage() {
   const [broadcasts, setBroadcasts] = useState([])
   const [currentBc, setCurrentBc] = useState(0)
   const [activeCount, setActiveCount] = useState(0)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [stats, setStats] = useState({ 
     edisi: 12, 
     liputan: 156,
@@ -25,45 +26,44 @@ export default function LandingPage() {
     ]
   })
 
-  const fetchPublicBroadcasts = async () => {
-    try {
-      const res = await fetch('/api/public/broadcasts')
-      const json = await res.json()
-      setBroadcasts(json.data || [])
-    } catch (e) {}
-  }
-
-  const fetchStats = async () => {
-    try {
-      const supabase = createClient()
-      const { count } = await supabase.from('members').select('*', { count: 'exact', head: true })
-        .eq('status', 'aktif')
-        .neq('role', 'super_admin')
-      setActiveCount(count || 0)
-      
-      const { data } = await supabase.from('settings').select('*').in('key', ['landing_edisi', 'landing_liputan', 'landing_linktree', 'landing_marquee'])
-      if (data) {
-        const edisi = data.find(s => s.key === 'landing_edisi')?.value || '12'
-        const liputan = data.find(s => s.key === 'landing_liputan')?.value || '156'
-        const linktree = data.find(s => s.key === 'landing_linktree')?.value || '#'
-        
-        let marquee = []
-        const marqueeStr = data.find(s => s.key === 'landing_marquee')?.value
-        if (marqueeStr) {
-          marquee = marqueeStr.split(',').map(s => s.trim()).filter(Boolean)
-        }
-        
-        setStats({ edisi, liputan, linktree, marquee })
-      }
-    } catch (e) {}
-  }
-
   useEffect(() => {
     const supabase = createClient()
-    supabase.auth.getSession().then(({ data }) => setIsLoggedIn(!!data?.session))
-    fetchPublicBroadcasts()
-    fetchStats()
+    
+    // Run all initial fetches in parallel for faster loading
+    Promise.all([
+      // Check login status (getSession is local-only, no network call)
+      supabase.auth.getSession().then(({ data }) => setIsLoggedIn(!!data?.session)),
+      // Fetch public broadcasts
+      fetch('/api/public/broadcasts').then(res => res.json()).then(json => setBroadcasts(json.data || [])).catch(() => {}),
+      // Fetch stats (active count + settings)
+      (async () => {
+        try {
+          const [countResult, settingsResult] = await Promise.all([
+            supabase.from('members').select('*', { count: 'exact', head: true })
+              .eq('status', 'aktif').neq('role', 'super_admin'),
+            supabase.from('settings').select('*')
+              .in('key', ['landing_edisi', 'landing_liputan', 'landing_linktree', 'landing_marquee'])
+          ])
+          
+          setActiveCount(countResult.count || 0)
+          
+          if (settingsResult.data) {
+            const data = settingsResult.data
+            const edisi = data.find(s => s.key === 'landing_edisi')?.value || '12'
+            const liputan = data.find(s => s.key === 'landing_liputan')?.value || '156'
+            const linktree = data.find(s => s.key === 'landing_linktree')?.value || '#'
+            let marquee = []
+            const marqueeStr = data.find(s => s.key === 'landing_marquee')?.value
+            if (marqueeStr) {
+              marquee = marqueeStr.split(',').map(s => s.trim()).filter(Boolean)
+            }
+            setStats({ edisi, liputan, linktree, marquee })
+          }
+        } catch (e) {}
+      })()
+    ])
   }, [])
+
 
   // Auto-rotate broadcasts
   useEffect(() => {
@@ -113,9 +113,12 @@ export default function LandingPage() {
 
       <nav className={styles.navbar}>
         <div className={styles.logo}>
-          <Image src="/logo.png" alt="Jurnal Fourteen Logo" width={50} height={50} style={{ objectFit: 'contain' }} />
+          <Image src="/logo.png" alt="Jurnal Fourteen Logo" width={50} height={50} style={{ objectFit: 'contain' }} priority />
           <span style={{ marginLeft: '10px' }}>JURNFOURTEEN</span>
         </div>
+        <button className={styles.hamburger} onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Toggle menu">
+          {mobileMenuOpen ? <X size={28} strokeWidth={3} /> : <Menu size={28} strokeWidth={3} />}
+        </button>
         <div className={styles.navLinks}>
           <a href="#tentang" className={styles.navLink}>Tentang</a>
           <a href="#broadcast" className={styles.navLink}>Info</a>
@@ -127,6 +130,24 @@ export default function LandingPage() {
           )}
         </div>
       </nav>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div className={styles.mobileMenu}>
+          <a href="#tentang" className={styles.mobileMenuItem} onClick={() => setMobileMenuOpen(false)}>Tentang</a>
+          <a href="#broadcast" className={styles.mobileMenuItem} onClick={() => setMobileMenuOpen(false)}>Info</a>
+          <Link href="/galeri" className={styles.mobileMenuItem} onClick={() => setMobileMenuOpen(false)}>Galeri</Link>
+          {isLoggedIn ? (
+            <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+              <Button variant="primary" style={{ width: '100%' }}>DASHBOARD</Button>
+            </Link>
+          ) : (
+            <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+              <Button variant="primary" style={{ width: '100%' }}>LOGIN</Button>
+            </Link>
+          )}
+        </div>
+      )}
 
       <section className={styles.hero}>
         <div className={styles.decorCircle} style={{ width: '150px', height: '150px', top: '10%', left: '5%' }}></div>
@@ -192,14 +213,14 @@ export default function LandingPage() {
               <div className={styles.marqueeGroup}>
                 {safeMarquee.map((img, i) => (
                   <div key={`g1-${i}`} className={styles.marqueeImageWrapper}>
-                    <img src={img} alt={`Gallery ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <Image src={img} alt={`Gallery ${i}`} fill sizes="300px" style={{ objectFit: 'cover' }} loading="lazy" quality={75} />
                   </div>
                 ))}
               </div>
               <div className={styles.marqueeGroup} aria-hidden="true">
                 {safeMarquee.map((img, i) => (
                   <div key={`g2-${i}`} className={styles.marqueeImageWrapper}>
-                    <img src={img} alt={`Gallery ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <Image src={img} alt="" fill sizes="300px" style={{ objectFit: 'cover' }} loading="lazy" quality={75} />
                   </div>
                 ))}
               </div>

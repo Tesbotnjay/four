@@ -29,37 +29,28 @@ export default function DashboardPage() {
         const role = member?.role || 'anggota';
         const isAdmin = ['super_admin', 'admin', 'sekretaris'].includes(role);
 
-        // Fetch active activity
-        const { data: activity } = await supabase
-          .from('activities')
-          .select('*')
-          .eq('status', 'aktif')
-          .limit(1)
-          .maybeSingle();
-        
-        setActiveActivity(activity || null);
+        // Parallel fetch: activity + broadcasts + role-specific data
+        const [activityResult, broadcastResult] = await Promise.all([
+          supabase.from('activities').select('*').eq('status', 'aktif').limit(1).maybeSingle(),
+          supabase.from('broadcasts').select('*').order('created_at', { ascending: false }).limit(3),
+        ]);
 
-        // Fetch recent broadcasts
-        const { data: broadcasts } = await supabase
-          .from('broadcasts')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(3);
-        
-        setRecentBroadcasts(broadcasts || []);
+        const activity = activityResult.data || null;
+        setActiveActivity(activity);
+        setRecentBroadcasts(broadcastResult.data || []);
 
         if (isAdmin) {
-          const { count: totalMembers } = await supabase.from('members').select('*', { count: 'exact', head: true });
-          const { count: pendingMembers } = await supabase.from('members').select('*', { count: 'exact', head: true }).eq('status', 'menunggu_verifikasi');
-          
+          // Parallel fetch for admin stats
+          const [totalResult, pendingResult] = await Promise.all([
+            supabase.from('members').select('*', { count: 'exact', head: true }),
+            supabase.from('members').select('*', { count: 'exact', head: true }).eq('status', 'menunggu_verifikasi'),
+          ]);
+
           setStats({
-            totalMembers: totalMembers || 0,
-            pendingMembers: pendingMembers || 0,
-            hadir: 0,
-            izin: 0,
-            sakit: 0,
-            alfa: 0,
-            pendaftarBaru: pendingMembers || 0,
+            totalMembers: totalResult.count || 0,
+            pendingMembers: pendingResult.count || 0,
+            hadir: 0, izin: 0, sakit: 0, alfa: 0,
+            pendaftarBaru: pendingResult.count || 0,
             kegiatanAktif: activity ? 1 : 0
           });
         } else {
@@ -79,7 +70,6 @@ export default function DashboardPage() {
           }
           const total = hadir + izin + sakit + alfa;
           const persentase = total > 0 ? Math.round((hadir / total) * 100) : 0;
-
           setStats({ hadir, izin, sakit, alfa, persentase });
         }
       } catch (error) {

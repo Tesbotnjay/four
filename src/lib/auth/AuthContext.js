@@ -41,7 +41,8 @@ export function AuthProvider({ children }) {
   }, [supabase])
 
   useEffect(() => {
-    // Get initial session
+    // getSession() is local-only (no network call) - much faster initial load
+    // The middleware already validates the session server-side
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         setUser(session.user)

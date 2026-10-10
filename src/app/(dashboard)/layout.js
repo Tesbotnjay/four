@@ -29,6 +29,16 @@ const MENU_ITEMS = [
   { path: '/settings', label: 'Pengaturan', icon: Settings, roles: ['super_admin'] },
 ];
 
+// Role-based route restrictions (moved from middleware to avoid 504 timeout)
+const ROLE_ROUTES = {
+  '/admin': ['super_admin'],
+  '/members': ['super_admin', 'admin', 'pembina', 'sekretaris'],
+  '/attendance/verification': ['super_admin', 'admin', 'sekretaris'],
+  '/reports': ['super_admin', 'admin', 'pembina', 'sekretaris'],
+  '/logs': ['super_admin', 'admin', 'pembina'],
+  '/settings': ['super_admin'],
+};
+
 function Sidebar({ isOpen, onClose, role }) {
   const pathname = usePathname();
   const { signOut } = useAuth();
@@ -167,6 +177,7 @@ function Topbar({ toggleSidebar, userProfile }) {
 function DashboardLayoutContent({ children }) {
   const { user, member, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -174,6 +185,19 @@ function DashboardLayoutContent({ children }) {
       router.push('/login');
     }
   }, [user, loading, router]);
+
+  // Role-based access check (moved from middleware to avoid 504 timeout)
+  useEffect(() => {
+    if (!loading && user && member) {
+      const role = member.role || 'anggota';
+      for (const [route, allowedRoles] of Object.entries(ROLE_ROUTES)) {
+        if (pathname.startsWith(route) && !allowedRoles.includes(role)) {
+          router.push('/dashboard');
+          return;
+        }
+      }
+    }
+  }, [loading, user, member, pathname, router]);
 
   if (loading || !user) {
     return <LoadingSpinner fullPage size="lg" />;

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+/* Font loaded via next/font/google in layout.js - no @import needed */
 
 :root {
   /* Colors */
@@ -363,4 +363,149 @@ p { margin-top: 0; margin-bottom: 1rem; }
 .empty-state-icon {
   font-size: 3rem;
   margin-bottom: 1rem;
+}
+
+/* ============================================
+   MOBILE & TOUCH OPTIMIZATIONS
+   ============================================ */
+
+/* Better touch targets (44px minimum per WCAG) */
+@media (max-width: 768px) {
+  .btn {
+    min-height: 44px;
+    padding: 0.625rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .input, .select, .textarea {
+    min-height: 44px;
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+
+  /* Optimize tables for mobile */
+  .table-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+
+  .table-brutal th, .table-brutal td {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  /* Cards on mobile */
+  .card {
+    padding: 1rem;
+    box-shadow: 3px 3px 0px #000;
+  }
+
+  /* Modal on mobile */
+  .modal-content {
+    max-width: 100%;
+    max-height: 95vh;
+    margin: 0.5rem;
+    box-shadow: 4px 4px 0px #000;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  /* Toast on mobile */
+  .toast-container {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .toast {
+    min-width: auto;
+    width: 100%;
+  }
+
+  /* Sidebar mobile */
+  .sidebar {
+    width: 280px;
+    max-width: 85vw;
+  }
+
+  /* Topbar mobile */
+  .topbar {
+    padding: 0 0.75rem;
+    height: 56px;
+  }
+
+  /* Main content mobile */
+  .main-content {
+    padding: 1rem;
+  }
+
+  /* Stat cards mobile */
+  .stat-value {
+    font-size: 2rem;
+  }
+
+  /* Connection indicator mobile */
+  .connection-indicator {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.4rem;
+  }
+}
+
+/* Small phone optimizations */
+@media (max-width: 375px) {
+  .btn {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .card {
+    padding: 0.75rem;
+  }
+
+  .main-content {
+    padding: 0.75rem;
+  }
+}
+
+/* Performance: Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Tap highlight optimization for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .btn:hover:not(:disabled) {
+    transform: none;
+    box-shadow: var(--shadow-main);
+  }
+
+  .btn:active:not(:disabled) {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .card-hover:hover {
+    transform: none;
+    box-shadow: var(--shadow-main);
+  }
+}
+
+/* Performance: GPU acceleration for animated elements */
+.sidebar {
+  will-change: transform;
+}
+
+.modal-overlay {
+  will-change: opacity;
+}
+
+.toast {
+  will-change: transform, opacity;
 }
