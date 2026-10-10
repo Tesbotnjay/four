@@ -52,20 +52,30 @@ export async function middleware(request) {
     return supabaseResponse
   }
 
-  // 4. Get user session - with timeout protection
-  let user = null
-  try {
-    const result = await supabase.auth.getUser()
-    user = result.data?.user ?? null
-  } catch (error) {
-    // If Supabase is down/slow, let the request through rather than 504
-    console.error('Middleware: Supabase auth error:', error.message)
+  // 4. Fast-track truly public pages so they NEVER hang if Supabase is down/asleep
+  const authRoutes = ['/login', '/register']
+  if (isPublicRoute && !authRoutes.includes(pathname)) {
     return supabaseResponse
   }
 
-  // 5. Public route handling
-  if (isPublicRoute) {
-    if (user && pathname === '/login') {
+  // 5. Get user session - with timeout protection (Vercel kills at 25s, so we timeout at 10s)
+  let user = null
+  try {
+    const fetchWithTimeout = Promise.race([
+      supabase.auth.getUser(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 10000))
+    ])
+    const result = await fetchWithTimeout
+    user = result.data?.user ?? null
+  } catch (error) {
+    console.error('Middleware: Supabase auth error/timeout:', error.message)
+    // On timeout/error, assume not logged in.
+    user = null
+  }
+
+  // 6. Auth route handling (login/register)
+  if (authRoutes.includes(pathname)) {
+    if (user) {
       const url = request.nextUrl.clone()
       url.pathname = '/dashboard'
       return NextResponse.redirect(url)
