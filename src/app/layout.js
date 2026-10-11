@@ -6,7 +6,7 @@ const inter = Inter({
   subsets: ['latin'], 
   weight: ['400', '600', '700', '800', '900'],
   display: 'swap',
-  preload: true,
+  preload: false,
 });
 
 export const metadata = {

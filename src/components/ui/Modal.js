@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 
-const Modal = ({ isOpen, onClose, title, children, footer }) => {
+const Modal = ({ isOpen = true, onClose, title, children, footer }) => {
   if (!isOpen) return null;
 
   return (

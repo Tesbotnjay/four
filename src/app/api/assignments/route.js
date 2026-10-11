@@ -44,11 +44,18 @@ export async function POST(request) {
     const supabase = await createServiceClient()
     const body = await request.json()
 
-    const { title, description, divisi, assigned_to, assigned_by, activity_id, due_date } = body
+    const { title, description, divisi, assigned_to, assigned_by, activity_id, due_date, drive_url } = body
 
     if (!title || !description || !divisi || !assigned_to || !assigned_by) {
       return NextResponse.json(
         { error: 'Title, description, divisi, assigned_to, dan assigned_by wajib diisi' },
+        { status: 400 }
+      )
+    }
+
+    if (drive_url && !String(drive_url).includes('drive.google.com')) {
+      return NextResponse.json(
+        { error: 'URL harus berupa link Google Drive' },
         { status: 400 }
       )
     }
@@ -69,6 +76,17 @@ export async function POST(request) {
       .single()
 
     if (error) throw error
+
+    if (drive_url) {
+      const { error: linkError } = await supabase.from('drive_links').insert({
+        title: `Lampiran tugas: ${title}`,
+        drive_url,
+        divisi_owner: divisi,
+        description,
+        created_by: assigned_by,
+      })
+      if (linkError) throw linkError
+    }
 
     // Log activity
     await supabase.from('activity_logs').insert({

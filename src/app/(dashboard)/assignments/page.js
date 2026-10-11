@@ -19,6 +19,7 @@ export default function AssignmentsPage() {
     divisi: '',
     assigned_to: '',
     due_date: '',
+    drive_url: '',
   });
   const [members, setMembers] = useState([]);
 
@@ -71,7 +72,7 @@ export default function AssignmentsPage() {
 
       if (res.ok) {
         setShowModal(false);
-        setFormData({ title: '', description: '', divisi: '', assigned_to: '', due_date: '' });
+        setFormData({ title: '', description: '', divisi: member.divisi || '', assigned_to: '', due_date: '', drive_url: '' });
         loadAssignments();
       } else {
         const error = await res.json();
@@ -92,7 +93,10 @@ export default function AssignmentsPage() {
       <div className={styles.header}>
         <h2>Penugasan Divisi</h2>
         {isKoor && (
-          <Button onClick={() => setShowModal(true)} style={{ gap: '0.5rem' }}>
+          <Button onClick={() => {
+            setFormData({ title: '', description: '', divisi: member.divisi || '', assigned_to: '', due_date: '', drive_url: '' });
+            setShowModal(true);
+          }} style={{ gap: '0.5rem' }}>
             <Plus size={20} /> Buat Penugasan
           </Button>
         )}
@@ -126,7 +130,7 @@ export default function AssignmentsPage() {
       )}
 
       {showModal && (
-        <Modal title="Buat Penugasan" onClose={() => setShowModal(false)}>
+        <Modal isOpen={true} title="Buat Penugasan" onClose={() => setShowModal(false)}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <Input
               label="Judul Penugasan"
@@ -144,20 +148,18 @@ export default function AssignmentsPage() {
                 style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
               />
             </div>
-            <select
+            <Input
+              label="Divisi"
               value={formData.divisi}
-              onChange={(e) => setFormData({ ...formData, divisi: e.target.value })}
-              style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
-            >
-              <option value="">Pilih Divisi</option>
-              {DIVISI_OPTIONS.map(d => <option key={d} value={d}>{d}</option>)}
-            </select>
+              readOnly
+            />
             <select
+              aria-label="Pilih Anggota Divisi"
               value={formData.assigned_to}
               onChange={(e) => setFormData({ ...formData, assigned_to: e.target.value })}
               style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
             >
-              <option value="">Pilih Anggota</option>
+              <option value="">Pilih Anggota {formData.divisi}</option>
               {members.map(m => <option key={m.id} value={m.id}>{m.full_name}</option>)}
             </select>
             <Input
@@ -165,6 +167,13 @@ export default function AssignmentsPage() {
               type="date"
               value={formData.due_date}
               onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
+            />
+            <Input
+              label="Link Google Drive (opsional)"
+              type="url"
+              value={formData.drive_url}
+              onChange={(e) => setFormData({ ...formData, drive_url: e.target.value })}
+              placeholder="https://drive.google.com/..."
             />
             <div style={{ display: 'flex', gap: '1rem' }}>
               <Button onClick={handleCreate} variant="primary">Buat</Button>

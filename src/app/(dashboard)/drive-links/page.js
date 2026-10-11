@@ -21,6 +21,12 @@ export default function DriveLinksPage() {
   });
 
   useEffect(() => {
+    if (member?.is_koor && member?.divisi) {
+      setFormData(f => ({ ...f, divisi_owner: member.divisi }));
+    }
+  }, [member]);
+
+  useEffect(() => {
     if (authLoading || !member) return;
     loadDriveLinks();
   }, [member, authLoading]);
@@ -39,8 +45,8 @@ export default function DriveLinksPage() {
   }
 
   async function handleCreate() {
-    if (!formData.title || !formData.drive_url || !formData.divisi_owner) {
-      alert('Mohon isi semua field yang diperlukan');
+    if (!formData.title || !formData.drive_url || !formData.divisi_owner || !formData.description.trim()) {
+      alert('Mohon isi judul, link, divisi, dan deskripsi');
       return;
     }
 
@@ -120,7 +126,7 @@ export default function DriveLinksPage() {
       )}
 
       {showModal && (
-        <Modal title="Tambah Link Google Drive" onClose={() => setShowModal(false)}>
+        <Modal isOpen={true} title="Tambah Link Google Drive" onClose={() => setShowModal(false)}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <Input
               label="Nama/Judul Link"
@@ -135,7 +141,9 @@ export default function DriveLinksPage() {
               placeholder="https://drive.google.com/..."
             />
             <select
+              aria-label="Divisi pemilik link"
               value={formData.divisi_owner}
+              disabled={!!member?.is_koor && !!member?.divisi}
               onChange={(e) => setFormData({ ...formData, divisi_owner: e.target.value })}
               style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
             >
@@ -143,11 +151,11 @@ export default function DriveLinksPage() {
               {DIVISI_OPTIONS.map(d => <option key={d} value={d}>{d}</option>)}
             </select>
             <div>
-              <label>Deskripsi (opsional)</label>
+              <label>Deskripsi *</label>
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Jelaskan isi folder/file"
+                placeholder="Jelaskan isi folder/file (wajib)"
                 rows={3}
                 style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
               />
