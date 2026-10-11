@@ -1,0 +1,120 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem 1rem;
+  background: var(--surface, #fff);
+  border: 3px solid var(--border-color, #000);
+  border-radius: var(--radius-main, 8px);
+  box-shadow: var(--shadow-main, 4px 4px 0 #000);
+}
+
+.canvas {
+  image-rendering: pixelated;
+  cursor: pointer;
+  max-width: 100%;
+  height: auto;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.infoRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.infoRow span {
+  font-weight: 700;
+  color: var(--text-muted, #6b7280);
+}
+
+.infoRow strong {
+  color: var(--text-main, #111);
+  font-weight: 900;
+}
+
+.controls {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.controls button {
+  padding: 0.5rem 0.75rem;
+  background: var(--primary-lt, #2A4A7F);
+  border: 2px solid var(--border-color, #000);
+  border-radius: var(--radius-main, 8px);
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: var(--shadow-main, 4px 4px 0 #000);
+}
+
+.controls button:hover {
+  background: var(--primary, #1B365D);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #000;
+}
+
+.badge {
+  padding: 0.35rem 0.65rem;
+  background: var(--secondary, #FFE66D);
+  border: 2px solid var(--border-color, #000);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.canvasWrapper {
+  position: relative;
+  min-width: 200px;
+  min-height: 200px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.loader, .error {
+  position: absolute;
+  color: var(--text-muted, #6b7280);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.error { color: var(--accent, #FF6B6B); }
+
+.tagGroup {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.tag {
+  padding: 0.3rem 0.5rem;
+  background: var(--bg-color, #FFFDF7);
+  border: 2px solid var(--border-color, #000);
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.tagAccent { background: var(--accent, #FF6B6B); }
+
+.counter, .hint {
+  color: var(--text-muted, #6b7280);
+  font-weight: 800;
+}
+
+.hint { font-size: 0.7rem; }
+
+.btn { padding: 0.5rem 0.75rem; }
+.controls { align-items: center; }

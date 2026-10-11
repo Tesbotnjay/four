@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/Button'
 import { Newspaper, Users, Camera, Mic, Radio, Calendar, MapPin, ChevronRight, ExternalLink, Menu, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import JurnCat from '@/components/JurnCat'
 import styles from './page.module.css'
 
 export default function LandingPage() {
@@ -193,6 +194,10 @@ export default function LandingPage() {
           </div>
         </section>
       )}
+
+      <section className={styles.section} style={{ paddingBottom: 0, display: 'flex', justifyContent: 'center' }}>
+        <JurnCat interactive={true} />
+      </section>
 
       <section id="tentang" className={styles.section} style={{ paddingBottom: 0 }}>
         <h2 className={styles.sectionTitle}>TENTANG JURNFOURTEEN</h2>
