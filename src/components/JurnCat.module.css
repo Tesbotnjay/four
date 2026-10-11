@@ -1,13 +1,73 @@
 .container {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 30;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding: 1.25rem 1.5rem 1rem;
+  gap: 0.1rem;
+  pointer-events: none;
+}
+
+.bubble {
+  padding: 0.35rem 0.6rem;
+  background: var(--secondary, #FFE66D);
+  border: 2px solid var(--border-color, #000);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 #000;
+  font-size: 0.7rem;
+  font-weight: 900;
+  transform: rotate(3deg);
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  right: 1.2rem;
+  bottom: -0.45rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  background: var(--secondary, #FFE66D);
+  border-right: 2px solid #000;
+  border-bottom: 2px solid #000;
+  transform: rotate(45deg);
+}
+
+.canvasWrapper {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  display: grid;
+  place-items: center;
+  pointer-events: auto;
+}
+
+.canvasWrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0.6rem;
   background: var(--surface, #fff);
   border: 3px solid var(--border-color, #000);
-  border-radius: var(--radius-main, 8px);
-  box-shadow: var(--shadow-main, 4px 4px 0 #000);
+  border-radius: 50%;
+  box-shadow: 4px 4px 0 #000;
+  z-index: -1;
+}
+
+@media (max-width: 600px) {
+  .container {
+    right: 0.5rem;
+    bottom: 0.6rem;
+  }
+
+  .canvasWrapper {
+    width: 105px;
+    height: 105px;
+  }
+
+  .canvas {
+    transform: scale(0.7);
+  }
 }
 
 .canvas {
@@ -75,11 +135,6 @@
 }
 
 .canvasWrapper {
-  position: relative;
-  min-width: 200px;
-  min-height: 200px;
-  display: grid;
-  place-items: center;
   cursor: pointer;
 }
 

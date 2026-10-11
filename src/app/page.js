@@ -195,9 +195,8 @@ export default function LandingPage() {
         </section>
       )}
 
-      <section className={styles.section} style={{ paddingBottom: 0, display: 'flex', justifyContent: 'center' }}>
-        <JurnCat interactive={true} />
-      </section>
+      {/* Floating public-page mascot. Stays out of dashboard/app pages. */}
+      <JurnCat interactive={true} />
 
       <section id="tentang" className={styles.section} style={{ paddingBottom: 0 }}>
         <h2 className={styles.sectionTitle}>TENTANG JURNFOURTEEN</h2>

@@ -7,44 +7,6 @@ import drawCat from '@/lib/pixel-cat/drawCat'
 
 const APPEARANCES = [
   {
-    pelt_name: 'Tortie',
-    pelt_color: 'CREAM',
-    eye_colour: 'EMERALD',
-    eye_colour2: 'SILVER',
-    reverse: false,
-    white_patches: null,
-    vitiligo: null,
-    points: null,
-    white_patches_tint: null,
-    tortie_marking: 'STREAMSTRIKE',
-    tortie_base: 'bengal',
-    tortie_pattern: 'speckled',
-    tortie_color: 'CREAM',
-    skin: 'DARKBROWN',
-    tint: 'cooldilute',
-    scars: [],
-    accessory: ['NYLON_orange'],
-  },
-  {
-    pelt_name: 'Bengal',
-    pelt_color: 'PALEGREY',
-    eye_colour: 'GREENYELLOW',
-    eye_colour2: null,
-    reverse: false,
-    white_patches: null,
-    vitiligo: null,
-    points: null,
-    white_patches_tint: null,
-    tortie_marking: null,
-    tortie_base: null,
-    tortie_pattern: null,
-    tortie_color: null,
-    skin: 'MARBLED',
-    tint: 'cooldilute',
-    scars: ['TAILBASE'],
-    accessory: ['PRAIRIE FIRE'],
-  },
-  {
     pelt_name: 'Agouti',
     pelt_color: 'LILAC',
     eye_colour: 'GREY',
@@ -65,7 +27,7 @@ const APPEARANCES = [
   }
 ]
 
-const SCALE = 4 // lebih besar dari 50x50
+const SCALE = 3 // floating mascot size
 const CAT_SPRITE = 7 // adolescent_short0 pose (index 7 dalam pose_sprite_data.json)
 
 export default function JurnCat({ appearanceIndex = 0, interactive = true }) {
@@ -159,9 +121,9 @@ export default function JurnCat({ appearanceIndex = 0, interactive = true }) {
   const current = appearances[activeIndex]
 
   return (
-    <div className={styles.container}>
-      <div className={styles.badge}>MASKOT JURNALISTIK #14</div>
-      <div className={styles.canvasWrapper} onClick={handleNext} title="Klik untuk ganti jenis kucing!">
+    <aside className={styles.container} aria-label="Maskot JurnFourteen">
+      <div className={styles.bubble}>standby!</div>
+      <div className={styles.canvasWrapper} onClick={interactive ? handleNext : undefined} title="Maskot JurnFourteen standby">
         <canvas
           ref={canvasRef}
           className={styles.canvas}
@@ -171,22 +133,6 @@ export default function JurnCat({ appearanceIndex = 0, interactive = true }) {
         {loading && <div className={styles.loader}>Memuat...</div>}
         {error && <div className={styles.error}>{error}</div>}
       </div>
-      <div className={styles.info}>
-        <div className={styles.tagGroup}>
-          <span className={styles.tag}>{current.pelt_name}</span>
-          <span className={styles.tag}>{current.pelt_color}</span>
-          <span className={styles.tag}>Mata: {current.eye_colour}</span>
-          {current.accessory?.[0] && (
-            <span className={`${styles.tag} ${styles.tagAccent}`}>{current.accessory[0]}</span>
-          )}
-        </div>
-        <div className={styles.controls}>
-          <button onClick={handlePrev} className={styles.btn} aria-label="Sebelumnya">◀</button>
-          <span className={styles.counter}>{activeIndex + 1} / {appearances.length}</span>
-          <button onClick={handleNext} className={styles.btn} aria-label="Selanjutnya">▶</button>
-        </div>
-        <small className={styles.hint}>Klik kucing atau tombol panah</small>
-      </div>
-    </div>
+    </aside>
   )
 }
