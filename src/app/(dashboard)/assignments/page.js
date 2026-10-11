@@ -83,6 +83,21 @@ export default function AssignmentsPage() {
     }
   }
 
+  async function handleDelete(taskId) {
+    if (!confirm('Yakin ingin menghapus penugasan ini?')) return;
+    try {
+      const res = await fetch(`/api/assignments?id=${taskId}`, { method: 'DELETE' });
+      if (res.ok) {
+        loadAssignments();
+      } else {
+        const error = await res.json();
+        alert('Gagal menghapus penugasan: ' + error.error);
+      }
+    } catch (error) {
+      alert('Error menghapus penugasan: ' + error.message);
+    }
+  }
+
   if (authLoading) return <LoadingSpinner fullPage size="lg" />;
   if (!member) return <div style={{ padding: '2rem', textAlign: 'center' }}>Memuat data...</div>;
 
@@ -114,9 +129,28 @@ export default function AssignmentsPage() {
             <Card key={task.id} className={styles.taskCard}>
               <div className={styles.taskHeader}>
                 <h3>{task.title}</h3>
-                <Badge variant={task.status === 'completed' ? 'success' : 'warning'}>
-                  {task.status === 'completed' ? 'Selesai' : 'Menunggu'}
-                </Badge>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Badge variant={task.status === 'completed' ? 'success' : 'warning'}>
+                    {task.status === 'completed' ? 'Selesai' : 'Menunggu'}
+                  </Badge>
+                  {(isKoor || member?.role === 'admin' || member?.role === 'super_admin') && (
+                    <button
+                      onClick={() => handleDelete(task.id)}
+                      title="Hapus Penugasan"
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: 'var(--accent, #FF6B6B)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '4px',
+                      }}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  )}
+                </div>
               </div>
               <p className={styles.description}>{task.description}</p>
               <div className={styles.taskMeta}>

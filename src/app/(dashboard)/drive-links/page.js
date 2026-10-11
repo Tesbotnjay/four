@@ -78,6 +78,21 @@ export default function DriveLinksPage() {
     }
   }
 
+  async function handleDelete(linkId) {
+    if (!confirm('Yakin ingin menghapus link Drive ini?')) return;
+    try {
+      const res = await fetch(`/api/drive-links?id=${linkId}`, { method: 'DELETE' });
+      if (res.ok) {
+        loadDriveLinks();
+      } else {
+        const error = await res.json();
+        alert('Gagal menghapus link: ' + error.error);
+      }
+    } catch (error) {
+      alert('Error menghapus link: ' + error.message);
+    }
+  }
+
   if (authLoading) return <LoadingSpinner fullPage size="lg" />;
   if (!member) return <div style={{ padding: '2rem', textAlign: 'center' }}>Memuat data...</div>;
 
@@ -106,7 +121,26 @@ export default function DriveLinksPage() {
             <Card key={link.id} className={styles.linkCard}>
               <div className={styles.linkHeader}>
                 <h3>{link.title}</h3>
-                <Badge variant="info">{link.divisi_owner}</Badge>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Badge variant="info">{link.divisi_owner}</Badge>
+                  {(isKoor || member?.role === 'admin' || member?.role === 'super_admin') && (
+                    <button
+                      onClick={() => handleDelete(link.id)}
+                      title="Hapus Link Drive"
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: 'var(--accent, #FF6B6B)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: '4px',
+                      }}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  )}
+                </div>
               </div>
               {link.description && <p className={styles.description}>{link.description}</p>}
               <div className={styles.linkFooter}>

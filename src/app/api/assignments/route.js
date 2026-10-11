@@ -100,3 +100,22 @@ export async function POST(request) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
+
+export async function DELETE(request) {
+  try {
+    const supabase = createServerClient()
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+
+    if (!id) {
+      return NextResponse.json({ error: 'ID penugasan wajib disertakan' }, { status: 400 })
+    }
+
+    const { error } = await supabase.from('assignments').delete().eq('id', id)
+    if (error) throw error
+
+    return NextResponse.json({ message: 'Penugasan berhasil dihapus' })
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+}
