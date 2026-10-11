@@ -52,7 +52,7 @@ export default function JurnCat({ appearanceIndex = 0, interactive = true }) {
 
         await drawCat(
           offscreen,
-          cat.pelt,
+          cat.getPelt(),
           CAT_SPRITE,
           false,
           undefined,
