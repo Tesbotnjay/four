@@ -25,6 +25,8 @@ const MENU_ITEMS = [
   { path: '/reports', label: 'Rekap', icon: FileText, roles: ['super_admin', 'admin', 'pembina', 'sekretaris'] },
   { path: '/announcements', label: 'Pengumuman', icon: Megaphone, roles: ['super_admin', 'admin', 'pembina', 'sekretaris', 'anggota'] },
   { path: '/notifications', label: 'Notifikasi', icon: Bell, roles: ['super_admin', 'admin', 'pembina', 'sekretaris', 'anggota'] },
+  { path: '/assignments', label: 'Penugasan Divisi', icon: FileText, roles: ['super_admin', 'admin', 'pembina', 'sekretaris', 'anggota'] },
+  { path: '/drive-links', label: 'Link Drive', icon: Radio, roles: ['super_admin', 'admin', 'pembina', 'sekretaris', 'anggota'] },
   { path: '/logs', label: 'Activity Log', icon: ScrollText, roles: ['super_admin', 'admin', 'pembina'] },
   { path: '/settings', label: 'Pengaturan', icon: Settings, roles: ['super_admin'] },
 ];

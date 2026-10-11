@@ -268,6 +268,26 @@ export default function DashboardPage() {
           {['super_admin', 'admin', 'pembina'].includes(member?.role) && (
             <LandingStatsEditor />
           )}
+
+          <Card className={styles.broadcastCard} style={{ marginTop: '1rem' }}>
+            <div className={styles.broadcastHeader}>
+              <h3 className={styles.sectionTitle}>Penugasan & Drive</h3>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.75rem' }}>
+              <Link href="/assignments" style={{ textDecoration: 'none' }}>
+                <Button variant="outline" style={{ width: '100%', justifyContent: 'space-between', display: 'flex' }}>
+                  <span>📋 Penugasan Divisi ({member?.divisi || 'Umum'})</span>
+                  <ArrowRight size={16} />
+                </Button>
+              </Link>
+              <Link href="/drive-links" style={{ textDecoration: 'none' }}>
+                <Button variant="secondary" style={{ width: '100%', justifyContent: 'space-between', display: 'flex' }}>
+                  <span>📁 Link Google Drive</span>
+                  <ArrowRight size={16} />
+                </Button>
+              </Link>
+            </div>
+          </Card>
         </div>
       </div>
     </div>
